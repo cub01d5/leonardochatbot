@@ -16,7 +16,6 @@
       --accent-green: #66bb6a;
       --shadow: 0 10px 25px rgba(0,0,0,0.1);
       --radius: 20px;
-      /* Font leggermente ridotti come richiesto */
       --font: "Comic Sans MS", "Chalkboard SE", "Segoe UI Emoji", sans-serif;
     }
     *{box-sizing:border-box}
@@ -32,7 +31,6 @@
       overflow-x: hidden;
     }
 
-    /* Pattern sfondo */
     body::before {
       content: "";
       position: fixed; inset: 0;
@@ -71,23 +69,20 @@
       letter-spacing: 0.5px;
     }
 
-    /* MAIN CONTAINER - Ridotto leggermente */
+    /* MAIN CONTAINER - Allargato per far stare il Leonardo Grande */
     main{
       flex: 1;
       width: 95%;
-      max-width: 1150px; /* Ridotto da 1250px per essere più compatto */
+      max-width: 1300px; /* Aumentato a 1300px */
       margin: 0 auto;
       padding-bottom: 30px;
     }
 
     .container{
       display: grid;
-      /* 1fr: Colonna info
-         380px: Colonna chat (leggermente ridotta)
-      */
       grid-template-columns: 1fr 380px; 
-      /* GAP Importante: Qui ci vive Leonardo */
-      gap: 160px; 
+      /* GAP ENORME: 250px di spazio vuoto per ospitare Leonardo Grande */
+      gap: 250px; 
       align-items: start;
     }
 
@@ -137,33 +132,32 @@
       box-shadow: var(--shadow);
       border: 4px solid var(--accent-green);
       position: relative; 
-      height: 600px; /* Altezza ridotta */
+      height: 600px; 
     }
     
-    /* --- MASCOTTE LEONARDO (FIX POSIZIONE) --- */
+    /* --- LEONARDO GRANDE --- */
     .leo-mascot {
       position: absolute;
-      bottom: 0;          /* Piedi allineati al fondo della chat */
+      bottom: 0;          
+      /* Lo attacchiamo a sinistra della chat */
+      right: 105%;        
       
-      /* LA MODIFICA CHIAVE: */
-      right: 105%;        /* Spinge l'immagine fuori a sinistra del 105% della larghezza */
-                          /* Questo assicura che sia SEMPRE a sinistra della chat */
-      
+      /* DIMENSIONI AUMENTATE */
       height: auto;       
-      max-height: 380px;  /* Altezza massima limitata per non essere gigante */
-      max-width: 200px;   /* Larghezza massima per stare nel GAP */
+      max-height: 550px;  /* Molto più alto (prima 380px) */
+      max-width: 350px;   /* Più largo per non essere schiacciato */
       
       z-index: 5;
       filter: drop-shadow(-5px 5px 8px rgba(0,0,0,0.2));
       pointer-events: none;
     }
 
-    /* FUMETTO */
+    /* FUMETTO (Spostato più in alto/sinistra per seguire la testa grande) */
     .chat-bubble-tip {
         position: absolute;
-        top: -30px; 
-        right: 100%; /* Anche il fumetto segue Leonardo */
-        margin-right: -40px; /* Aggiustamento fine */
+        top: -40px; 
+        right: 115%; /* Più a sinistra */
+        margin-right: -20px;
         
         background: #fff; color: var(--ink);
         padding: 8px 16px;
@@ -226,7 +220,7 @@
     }
 
     /* RESPONSIVE */
-    @media (max-width: 900px){
+    @media (max-width: 1100px){ /* Soglia alzata a 1100px per sicurezza */
       .container{ grid-template-columns: 1fr; gap: 40px; }
       .leo-mascot{ display: none; } 
       .chat-bubble-tip { display: none; }
