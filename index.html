@@ -3,429 +3,249 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LeoBot 🧠✨ | Leonardo da Vinci per bambini</title>
-  <meta name="description" content="Chatbot per bambini delle elementari su Leonardo da Vinci." />
-
+  <title>LeoBot a Vigevano 🏰 | Leonardo per bambini</title>
+  
   <style>
     :root{
-      --bg1:#fff7d6;
-      --bg2:#dff7ff;
-      --ink:#1f2937;
-      --card:#ffffffcc;
-      --stroke:#00000012;
-      --accent:#ff6b6b;
-      --accent2:#5b8cff;
-      --accent3:#33c481;
-      --shadow: 0 18px 40px rgba(0,0,0,.12);
-      --radius: 22px;
-      --radius2: 16px;
-      --max: 1100px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --bg-sunny: #fff9c4;
+      --bg-sky: #e1f5fe;
+      --ink: #37474f;
+      --card-bg: #ffffffdd;
+      --accent-red: #ff7043;
+      --accent-blue: #42a5f5;
+      --accent-green: #66bb6a;
+      --shadow: 0 12px 30px rgba(0,0,0,0.1);
+      --radius: 24px;
+      --font: "Comic Sans MS", "Chalkboard SE", ui-sans-serif, system-ui, sans-serif;
     }
     *{box-sizing:border-box}
+    
     body{
       margin:0;
-      font-family:var(--font);
-      color:var(--ink);
-      background:
-        radial-gradient(900px 500px at 20% 10%, var(--bg2), transparent 70%),
-        radial-gradient(900px 500px at 80% 20%, #ffe3f2, transparent 70%),
-        radial-gradient(900px 500px at 50% 95%, var(--bg1), transparent 70%),
-        linear-gradient(180deg, #fff, #f7fbff);
+      font-family: var(--font);
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--bg-sunny) 0%, var(--bg-sky) 100%);
       min-height:100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden; /* Evita scroll orizzontale per la mascotte */
     }
 
-    /* pattern leggero “stelline” */
-    body:before{
-      content:"";
-      position:fixed; inset:0;
-      background-image:
-        radial-gradient(#00000010 1px, transparent 1px);
-      background-size: 18px 18px;
-      pointer-events:none;
-      opacity:.35;
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background-image: radial-gradient(#ffca28 20%, transparent 20%), radial-gradient(#4fc3f7 20%, transparent 20%);
+      background-color: transparent;
+      background-position: 0 0, 50px 50px;
+      background-size: 100px 100px;
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: -1;
     }
 
-    header{
-      position:relative;
-      padding: 28px 16px 18px;
-    }
-    .wrap{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:0 12px;
-    }
-
-    .topbar{
-      display:flex;
-      gap:16px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
+    header{ padding: 20px; text-align: center; }
 
     .brand{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      border-radius: 999px;
-      padding: 10px 14px;
-      box-shadow: 0 10px 24px rgba(0,0,0,.06);
-      backdrop-filter: blur(10px);
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff;
+      padding: 10px 20px;
+      border-radius: 50px;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.1);
+      border: 3px solid var(--accent-blue);
     }
     .brand img{
-      width:56px; height:56px;
-      border-radius: 14px;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      border: 3px solid var(--accent-red);
+      background: #eee;
       object-fit: cover;
-      border: 2px solid #ffffff;
-      box-shadow: 0 10px 20px rgba(0,0,0,.12);
-      background:#fff;
     }
     .brand h1{
-      font-size: 18px;
-      line-height:1.1;
-      margin:0;
+      margin: 0; font-size: 24px; color: var(--accent-red);
+      letter-spacing: 1px;
     }
-    .brand p{
-      margin: 3px 0 0;
-      font-size: 13px;
-      opacity:.85;
-    }
-
-    .chips{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .chip{
-      font-size: 13px;
-      background: #fff;
-      border: 1px solid var(--stroke);
-      border-radius: 999px;
-      padding: 8px 12px;
-      box-shadow: 0 10px 20px rgba(0,0,0,.05);
-      display:flex;
-      gap:8px;
-      align-items:center;
-      user-select:none;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:999px;
-      background: var(--accent2);
-      box-shadow: 0 0 0 5px rgba(91,140,255,.18);
-    }
-    .dot.g{ background: var(--accent3); box-shadow: 0 0 0 5px rgba(51,196,129,.18);}
-    .dot.r{ background: var(--accent);  box-shadow: 0 0 0 5px rgba(255,107,107,.18);}
 
     main{
-      padding: 0 16px 28px;
-    }
-
-    .hero{
-      max-width:var(--max);
+      flex: 1;
+      max-width: 1100px; /* Leggermente ridotto per far stare la mascotte */
       margin: 0 auto;
-      padding: 16px 12px 0;
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 18px;
-      align-items:stretch;
+      padding: 20px;
+      width: 100%;
     }
 
-    @media (max-width: 920px){
-      .hero{ grid-template-columns: 1fr; }
-      .chips{ justify-content:flex-start; }
+    .container{
+      display: grid;
+      grid-template-columns: 1fr 400px; 
+      gap: 60px; /* Aumentato spazio per la mascotte */
+      align-items: start;
     }
 
-    .panel{
-      background: var(--card);
-      border: 1px solid var(--stroke);
+    @media (max-width: 950px){
+      .container{ grid-template-columns: 1fr; gap: 30px; }
+      /* Su mobile nascondiamo la mascotte laterale per spazio */
+      .leo-mascot { display: none; }
+    }
+
+    /* Colonna Sinistra */
+    .info-panel{
+      background: var(--card-bg);
+      padding: 25px;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      overflow:hidden;
+      border: 4px dashed var(--accent-blue);
     }
 
-    .panel-header{
-      padding: 16px 16px 12px;
-      border-bottom: 1px solid var(--stroke);
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-      justify-content:space-between;
-    }
-    .panel-title{
-      margin:0;
-      font-size: 20px;
-      line-height:1.2;
-    }
-    .panel-sub{
-      margin: 6px 0 0;
-      font-size: 14px;
-      opacity:.9;
+    .welcome-text h2{ margin-top: 0; color: var(--accent-blue); font-size: 28px; }
+    .welcome-text p{ font-size: 18px; line-height: 1.6; }
+
+    .photo-grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
     }
 
-    .badge{
-      background: linear-gradient(135deg, var(--accent2), #7c5bff);
-      color:#fff;
-      font-weight:700;
-      font-size:12px;
-      border-radius: 999px;
-      padding: 8px 12px;
-      box-shadow: 0 12px 24px rgba(91,140,255,.28);
-      white-space:nowrap;
-      align-self:flex-start;
+    .polaroid{
+      background: #fff;
+      padding: 10px 10px 30px 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transform: rotate(-2deg);
+      transition: transform 0.3s ease;
+      text-align: center;
+      border-radius: 4px;
+    }
+    .polaroid:nth-child(even){ transform: rotate(2deg); }
+    .polaroid:hover{ transform: scale(1.05) rotate(0deg); z-index: 10; }
+
+    .polaroid img{
+      width: 100%; height: 140px; object-fit: cover;
+      background: #ddd; border: 1px solid #eee;
+    }
+    .caption{
+      font-family: "Comic Sans MS", cursive;
+      font-size: 14px; color: #555; margin-top: 10px; font-weight: bold;
     }
 
-    .panel-body{
-      padding: 14px 16px 16px;
+    /* Colonna Destra: Chatbot + Mascotte */
+    .chat-column{
+      background: #fff;
+      padding: 10px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 4px solid var(--accent-green);
+      position: relative; /* Fondamentale per posizionare Leonardo */
+    }
+    
+    /* SAGOMA DI LEONARDO */
+    .leo-mascot {
+      position: absolute;
+      bottom: -10px; /* Poggia sul bordo inferiore */
+      left: -130px;  /* Esce a sinistra della chat */
+      width: 160px;  /* Dimensione sagoma */
+      z-index: 10;
+      filter: drop-shadow(-5px 5px 5px rgba(0,0,0,0.2));
+      pointer-events: none; /* Così se ci clicchi sopra non blocca nulla */
     }
 
-    .cards{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:12px;
-      margin-top:12px;
+    /* Fumetto opzionale sopra la chat */
+    .chat-bubble-tip {
+        position: absolute;
+        top: -60px;
+        left: -80px;
+        background: #fff;
+        padding: 10px 15px;
+        border-radius: 20px;
+        border: 2px solid var(--ink);
+        font-size: 14px;
+        width: 140px;
+        text-align: center;
+        box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        z-index: 11;
+        animation: float 3s ease-in-out infinite;
     }
-    @media (max-width: 520px){
-      .cards{ grid-template-columns: 1fr; }
-    }
-
-    .mini{
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius2);
-      padding: 12px 12px 10px;
-      background:#fff;
-      box-shadow: 0 10px 18px rgba(0,0,0,.05);
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-    }
-    .emoji{
-      width:40px;height:40px;border-radius:14px;
-      display:grid;place-items:center;
-      font-size:20px;
-      background: linear-gradient(135deg, #ffe08a, #ffd1f1);
-      border:1px solid var(--stroke);
-      flex:0 0 auto;
-    }
-    .mini h3{ margin:0; font-size:14px; }
-    .mini p{ margin:5px 0 0; font-size:13px; opacity:.9; }
-
-    .gallery{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-      padding: 12px;
-    }
-    .shot{
-      position:relative;
-      border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid var(--stroke);
-      background:#fff;
-      box-shadow: 0 12px 22px rgba(0,0,0,.08);
-      min-height: 150px;
-    }
-    .shot img{
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
-      background: #f3f6ff;
-    }
-    .cap{
-      position:absolute;
-      left:10px; bottom:10px;
-      background: rgba(255,255,255,.92);
-      border:1px solid var(--stroke);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-      box-shadow: 0 10px 20px rgba(0,0,0,.08);
+    .chat-bubble-tip::after {
+        content: ""; position: absolute; bottom: -10px; right: 20px;
+        border-width: 10px 10px 0; border-style: solid;
+        border-color: #fff transparent; display: block; width: 0;
     }
 
-    /* Chat area */
-    .chatwrap{
-      display:flex;
-      flex-direction:column;
-      height: 100%;
-    }
-    .chatbox{
-      padding: 14px 14px 18px;
-      display:grid;
-      place-items:center;
-    }
-    .chatframe{
-      width: 400px;
-      height: 600px;
-      border-radius: 18px;
-      overflow:hidden;
-      box-shadow: 0 18px 38px rgba(0,0,0,.14);
-      border: 1px solid var(--stroke);
-      background:#fff;
-    }
-    @media (max-width: 460px){
-      .chatframe{ width: 100%; }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
     }
 
-    footer{
-      padding: 14px 16px 26px;
+    iframe{
+      width: 100%; height: 600px;
+      border-radius: 16px; border: 2px solid #eee;
+      background: #f9f9f9;
     }
-    .foot{
-      max-width:var(--max);
-      margin: 0 auto;
-      padding: 0 12px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      opacity:.9;
-      font-size: 13px;
-    }
-    .hint{
-      background:#fff;
-      border:1px solid var(--stroke);
-      border-radius: 999px;
-      padding: 8px 12px;
-      box-shadow: 0 10px 18px rgba(0,0,0,.05);
-    }
-    a{ color: inherit; }
+
+    footer{ text-align: center; padding: 20px; font-size: 14px; opacity: 0.8; }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="wrap">
-      <div class="topbar">
-        <div class="brand">
-          <!-- Placeholder: icona "Leonardo cartoon" -->
-          <img src="images/leonardo-avatar-112.png" alt="Leonardo da Vinci in stile cartoon" />
-          <div>
-            <h1>LeoBot 🧠✨</h1>
-            <p>Il chatbot per scoprire Leonardo da Vinci (versione elementari!)</p>
-          </div>
-        </div>
 
-        <div class="chips" aria-label="Argomenti">
-          <div class="chip"><span class="dot g"></span>Invenzioni</div>
-          <div class="chip"><span class="dot"></span>Arte</div>
-          <div class="chip"><span class="dot r"></span>Curiosità</div>
-        </div>
+  <header>
+    <div class="brand">
+      <img src="logo.png" alt="Leo Cartoon" />
+      <div>
+        <h1>LeoBot</h1>
+        <small>Il tuo amico inventore!</small>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <!-- Colonna sinistra: info + immagini -->
-      <div class="panel">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Ciao! Io sono LeoBot 🤖🎨</h2>
-            <p class="panel-sub">
-              Fai domande semplici come:
-              <b>“Chi era Leonardo?”</b>, <b>“Cos’è il Codice?”</b>, <b>“Che invenzioni ha fatto?”</b>,
-              <b>“Cos’è la Gioconda?”</b>.
-            </p>
-          </div>
-          <div class="badge">Modalità bimbi</div>
+    <div class="container">
+      
+      <div class="info-panel">
+        <div class="welcome-text">
+          <h2>Ciao esploratore! 👋</h2>
+          <p>
+            Benvenuto nel laboratorio di Leonardo! Qui puoi chiedermi tutto su quando vivevo a 
+            <strong>Vigevano</strong>, alla corte del Duca Ludovico il Moro.
+          </p>
+          <p>Chiedimi: <em>"Cosa facevi al castello?"</em> o <em>"Come funzionano i mulini?"</em></p>
         </div>
 
-        <div class="panel-body">
-          <div class="cards">
-            <div class="mini">
-              <div class="emoji">🕵️‍♀️</div>
-              <div>
-                <h3>Indovina & Scopri</h3>
-                <p>Chiedi un quiz su Leonardo e prova a rispondere!</p>
-              </div>
-            </div>
-            <div class="mini">
-              <div class="emoji">🧪</div>
-              <div>
-                <h3>Esperimenti facili</h3>
-                <p>Domanda attività semplici da fare in classe o a casa.</p>
-              </div>
-            </div>
-            <div class="mini">
-              <div class="emoji">🖌️</div>
-              <div>
-                <h3>Disegno & Arte</h3>
-                <p>Chiedi idee per disegnare come un piccolo inventore!</p>
-              </div>
-            </div>
-            <div class="mini">
-              <div class="emoji">🦅</div>
-              <div>
-                <h3>Il sogno del volo</h3>
-                <p>Scopri perché Leonardo studiava uccelli e ali.</p>
-              </div>
-            </div>
+        <div class="photo-grid">
+          <div class="polaroid">
+            <img src="vigevano_piazza.jpg" alt="Piazza Ducale">
+            <div class="caption">La mia Piazza preferita!</div>
           </div>
-        </div>
-
-        <!-- Galleria immagini -->
-        <div class="gallery" aria-label="Immagini su Leonardo da Vinci">
-          <div class="shot">
-            <!-- Placeholder: laboratorio/invenzioni -->
-            <img src="images/leonardo-workshop-900x600.jpg" alt="Laboratorio e invenzioni di Leonardo (illustrazione)" />
-            <div class="cap">Officina di invenzioni 🔧</div>
+          <div class="polaroid">
+            <img src="vigevano_torre.jpg" alt="Castello Sforzesco">
+            <div class="caption">Il Castello del Duca</div>
           </div>
-          <div class="shot">
-            <!-- Placeholder: bozzetti/macchine volanti -->
-            <img src="images/flying-machine-900x600.jpg" alt="Macchina volante di Leonardo (illustrazione)" />
-            <div class="cap">Macchina volante 🪽</div>
-          </div>
-          <div class="shot">
-            <!-- Placeholder: “mappa” o Firenze/Vinci in stile cartoon -->
-            <img src="images/vinci-map-900x600.jpg" alt="Mappa di Vinci e dintorni (cartoon)" />
-            <div class="cap">Dove viveva? 🗺️</div>
-          </div>
-          <div class="shot">
-            <!-- Placeholder: quaderno/codice -->
-            <img src="images/notebook-codex-900x600.jpg" alt="Quaderno di appunti (codice) in stile illustrato" />
-            <div class="cap">I suoi quaderni 📓</div>
+          <div class="polaroid">
+            <img src="leonardo_mulini.jpg" alt="Disegni d'acqua">
+            <div class="caption">I miei studi sull'acqua</div>
           </div>
         </div>
       </div>
 
-      <!-- Colonna destra: chatbot -->
-      <div class="panel chatwrap">
-        <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Chat con LeoBot 💬</h2>
-            <p class="panel-sub">Scrivi una domanda e… via! ✨</p>
-          </div>
-          <div class="badge" style="background:linear-gradient(135deg,#33c481,#2bb3ff); box-shadow:0 12px 24px rgba(51,196,129,.28);">
-            Online
-          </div>
-        </div>
+      <div class="chat-column">
+        
+        <img src="leonardo_fullbody.png" class="leo-mascot" alt="Leonardo da Vinci Cartoon">
+        
+        <div class="chat-bubble-tip">Pssst! Sono qui dentro, scrivimi!</div>
 
-        <div class="chatbox">
-          <div class="chatframe" role="region" aria-label="Chatbot embed">
-            <!-- IL TUO EMBED -->
-            <iframe
-              src="https://interfaces.zapier.com/embed/chatbot/cmkky7da7006mqe6bgw1t1ox2"
-              height="600px"
-              width="400px"
-              allow="clipboard-write *"
-              style="border: none;"
-              title="LeoBot - Chatbot su Leonardo da Vinci"
-            ></iframe>
-          </div>
-        </div>
+        <iframe
+          src="https://interfaces.zapier.com/embed/chatbot/cmkky7da7006mqe6bgw1t1ox2"
+          allow="clipboard-write *"
+          title="LeoBot"
+        ></iframe>
       </div>
-    </section>
+
+    </div>
   </main>
 
   <footer>
-    <div class="foot">
-      <div class="hint">Suggerimento: prova “Dimmi 3 curiosità su Leonardo” 🧩</div>
-      <div class="hint">✨ Fatto con amore per piccoli geni ✨</div>
-    </div>
+    🏰 Fatto per imparare divertendosi con la storia di Vigevano! 🎨
   </footer>
+
 </body>
 </html>
