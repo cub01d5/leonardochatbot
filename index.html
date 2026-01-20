@@ -65,23 +65,27 @@
     main{
       flex:1;
       width:95%;
-      max-width:1300px;
+      max-width:1400px; /* Aumentato leggermente per accomodare la chat più larga */
       margin:0 auto;
       padding-bottom:30px;
     }
 
-    /* === GRID CORRETTA A 3 COLONNE === */
+    /* === GRID MODIFICATA === */
     .container{
       display:grid;
-      grid-template-columns: 1fr 300px 380px;
-      gap:40px;
+      /* 1. Info Panel (si adatta)
+         2. Leonardo (ridotto leggermente a 280px)
+         3. Chat (aumentata a 460px) 
+      */
+      grid-template-columns: 1fr 280px 460px;
+      gap:30px;
       align-items:end;
     }
 
-    /* INFO PANEL */
+    /* INFO PANEL (Ridotto leggermente) */
     .info-panel{
       background:var(--card-bg);
-      padding:25px;
+      padding:20px; /* Ridotto da 25px */
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       border:3px dashed var(--accent-blue);
@@ -90,19 +94,24 @@
     .welcome-text h2{
       margin-top:0;
       color:var(--accent-blue);
-      font-size:28px;
+      font-size:24px; /* Ridotto da 28px */
+    }
+    
+    .welcome-text p {
+      font-size: 15px; /* Testo leggermente più compatto */
+      line-height: 1.4;
     }
 
     .photo-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-      gap:12px;
-      margin-top:25px;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); /* Minimo ridotto per flessibilità */
+      gap:10px;
+      margin-top:20px;
     }
 
     .polaroid{
       background:#fff;
-      padding:8px 8px 30px;
+      padding:6px 6px 25px;
       box-shadow:0 4px 12px rgba(0,0,0,0.1);
       transform:rotate(-2deg);
       transition:0.3s;
@@ -115,13 +124,14 @@
 
     .polaroid img{
       width:100%;
-      height:130px;
+      height:110px; /* Foto leggermente più basse */
       object-fit:cover;
     }
 
     .caption{
       margin-top:8px;
       font-weight:bold;
+      font-size: 14px;
     }
 
     /* === COLONNA LEONARDO === */
@@ -133,17 +143,18 @@
     }
 
     .leo-mascot{
-      max-height:520px;
+      max-height:470px; /* Ridotto da 520px (leggermente) */
       width:auto;
       filter:drop-shadow(-6px 6px 10px rgba(0,0,0,0.25));
       pointer-events:none;
     }
 
+    /* BUBBLE CORRETTA (Non copre più la chat) */
     .chat-bubble-tip{
       position:absolute;
-      top:40px;
-      right:-10px;
-      transform:translateX(100%);
+      top:60px;
+      right:10px; /* Spostata DENTRO la colonna di Leo */
+      transform:none; /* Rimossa la traslazione che la spingeva sulla chat */
       background:#fff;
       padding:8px 16px;
       border-radius:30px;
@@ -151,33 +162,50 @@
       font-weight:bold;
       white-space:nowrap;
       box-shadow:3px 3px 0 rgba(0,0,0,0.1);
+      z-index: 10;
       animation:float 3s ease-in-out infinite;
     }
 
+    /* Freccetta ora punta verso DESTRA (verso la chat) */
     .chat-bubble-tip::after{
       content:"";
       position:absolute;
-      left:-8px;
+      right:-8px; /* Posizionata a destra */
+      left:auto;  /* Reset left */
       top:50%;
       transform:translateY(-50%);
-      border-width:8px 8px 8px 0;
+      border-width:8px 0 8px 8px; /* Triangolo che punta a destra */
       border-style:solid;
-      border-color:transparent #fff transparent transparent;
+      border-color:transparent transparent transparent #fff; /* Colore sul lato sinistro del border */
+    }
+    
+    /* Bordo della freccetta per matchare il contorno (opzionale per perfezione) */
+    .chat-bubble-tip::before {
+      content:"";
+      position:absolute;
+      right:-11px;
+      top:50%;
+      transform:translateY(-50%);
+      border-width:8px 0 8px 8px;
+      border-style:solid;
+      border-color:transparent transparent transparent var(--ink);
+      z-index: -1;
     }
 
     @keyframes float{
-      0%,100%{ transform:translateX(100%) translateY(0); }
-      50%{ transform:translateX(100%) translateY(-8px); }
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-8px); }
     }
 
-    /* CHAT */
+    /* CHAT (Più grande) */
     .chat-column{
       background:#fff;
       padding:10px;
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       border:4px solid var(--accent-green);
-      height:600px;
+      height:660px; /* Aumentato da 600px */
+      /* La larghezza è gestita dalla Grid (460px) */
     }
 
     iframe{
@@ -232,10 +260,10 @@
     /* RESPONSIVE */
     @media (max-width:1100px){
       .container{
-        grid-template-columns:1fr;
+        grid-template-columns:1fr; /* Colonna singola su schermi piccoli */
       }
       .leo-column{
-        display:none;
+        display:none; /* Nascondi Leo su mobile per spazio */
       }
       .chat-column{
         height:550px;
@@ -257,7 +285,6 @@
 
   <div class="container">
 
-    <!-- INFO -->
     <div class="info-panel">
       <div class="welcome-text">
         <h2>Benvenuti nel Rinascimento! 🎨</h2>
@@ -286,13 +313,11 @@
       </div>
     </div>
 
-    <!-- LEONARDO -->
     <div class="leo-column">
       <img src="images/leonardo_fullbody.png" class="leo-mascot" alt="Leonardo">
       <div class="chat-bubble-tip">Scrivi qui sotto! 👇</div>
     </div>
 
-    <!-- CHAT -->
     <div class="chat-column">
       <iframe
         src="https://interfaces.zapier.com/embed/chatbot/cmkky7da7006mqe6bgw1t1ox2"
