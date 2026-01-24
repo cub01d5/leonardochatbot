@@ -65,17 +65,109 @@
       width:95%;
       max-width:1500px;
       margin:10px auto;
-      padding-bottom:30px;
+      padding-bottom:20px; /* Riduci il padding bottom di main */
       display: grid;
-      grid-template-columns: 380px 1fr;
+      /* Colonna sinistra per l'immagine | Colonna destra per l'iframe */
+      grid-template-columns: 350px 1fr; /* Larghezza fissa per la colonna immagine */
       gap: 25px;
     }
 
-    /* COLONNA SINISTRA */
-    .left-column {
+    /* COLONNA SINISTRA: Generatore di Immagini */
+    .image-generator-column {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
+    }
+
+    .generator-box {
+      background:var(--card-bg);
+      padding:15px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      border:4px solid var(--accent-blue);
+      display: flex;
+      flex-direction: column;
+      height: 100%; /* Occupa tutto lo spazio disponibile in altezza */
+    }
+
+    .generator-box .chat-label {
+      font-size: 18px;
+      padding-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      flex: 1; /* Permette alla textarea di espandersi */
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      padding: 15px;
+      font-family: inherit;
+      resize: none;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    #btn-generate {
+      background: var(--accent-blue); color: white; border: none;
+      border-radius: 10px; padding: 12px; cursor: pointer; font-weight: bold; font-size: 15px;
+      margin-top: auto; /* Sposta il pulsante in basso */
+    }
+    #btn-generate:disabled { background: #ccc; }
+
+    /* Polaroid per l'output dell'immagine generata */
+    .polaroid.dynamic {
+      background:#fff;
+      padding:10px 10px 25px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      border: 3px solid var(--accent-green);
+      transform: rotate(1deg);
+      text-align:center;
+      margin-top: 15px; /* Spazio sotto il generatore */
+    }
+    .polaroid.dynamic img{
+      width:100%; height:auto; min-height: 180px; object-fit:cover; border: 1px solid #eee;
+    }
+    .polaroid .caption{
+      margin-top:8px; font-weight:bold; font-size: 14px;
+    }
+    #loader {
+        display:none; text-align: center; font-size: 13px; color: var(--accent-red);
+        padding-top:10px;
+    }
+
+
+    /* COLONNA DESTRA: Iframe principale */
+    .main-iframe-column {
+      background: #fff;
+      padding: 10px; /* Padding ridotto per massimizzare lo spazio iframe */
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 4px solid var(--accent-green);
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px); /* Altezza dinamica per l'iframe, lascia spazio a header e footer */
+    }
+
+    .main-iframe-column .chat-label {
+      font-size: 20px;
+      padding-bottom: 10px;
+    }
+
+    iframe {
+      flex: 1; /* L'iframe occupa tutto lo spazio verticale disponibile */
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid #eee;
+    }
+
+    /* SEZIONE INFERIORE (sotto main) */
+    .bottom-section-wrapper {
+        width: 95%;
+        max-width: 1500px;
+        margin: 0 auto 20px auto; /* Centra la sezione inferiore */
+        display: grid;
+        grid-template-columns: 1fr 300px; /* Due colonne per foto e Leonardo */
+        gap: 25px;
+        align-items: start;
     }
 
     .info-panel{
@@ -86,64 +178,21 @@
       border:3px dashed var(--accent-blue);
     }
 
-    .photo-grid{
+    .photo-grid-bottom{
       display:grid;
-      grid-template-columns: 1fr;
+      grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
       gap:15px;
+      margin-top:10px;
     }
-
-    .polaroid{
+    .polaroid-bottom{
       background:#fff;
-      padding:10px 10px 25px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      padding:8px 8px 20px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
       transform:rotate(-1deg);
       text-align:center;
     }
-    .polaroid.dynamic { border: 3px solid var(--accent-green); transform: rotate(1deg); }
-    .polaroid img{ width:100%; height:auto; min-height: 180px; object-fit:cover; border: 1px solid #eee; }
-    .caption{ margin-top:8px; font-weight:bold; font-size: 14px; }
-
-    /* COLONNA DESTRA */
-    .right-column {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .chat-container {
-      background: #fff;
-      padding: 12px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* CHAT DI LEONARDO (SOPRA E GRANDE) */
-    .chat-container.main-chat {
-      border: 4px solid var(--accent-green);
-      height: 500px; 
-    }
-
-    /* BOX PENNELLO MAGICO (SOTTO E PICCOLO) */
-    .chat-container.image-tool {
-      border: 4px solid var(--accent-blue);
-      height: 250px; 
-    }
-
-    .chat-label { text-align: center; font-weight: bold; padding-bottom: 8px; font-size: 16px; color: var(--ink); }
-
-    textarea {
-      width: 100%; height: 60px; border-radius: 10px; border: 2px solid #ddd;
-      padding: 10px; font-family: inherit; resize: none; font-size: 14px;
-    }
-    #btn-generate {
-      background: var(--accent-blue); color: white; border: none;
-      border-radius: 10px; padding: 10px; cursor: pointer; font-weight: bold; font-size: 14px;
-      margin-top: 5px;
-    }
-
-    iframe { flex: 1; width: 100%; border-radius: 14px; border: 1px solid #eee; }
+    .polaroid-bottom img{ width:100%; height:120px; object-fit:cover; }
+    .polaroid-bottom .caption{ margin-top:6px; font-weight:bold; font-size: 12px; }
 
     .mirror-section{
       background:#fff; padding:15px; border-radius:var(--radius);
@@ -157,14 +206,29 @@
     }
     .mirror-output{ background:#f0f0f0; color:var(--accent-blue); transform:scaleX(-1); }
 
+    .leo-mascot-bottom {
+      text-align: center;
+      margin-top: 20px; /* Spazio sopra la mascotte */
+    }
+    .leo-mascot-bottom img {
+        max-width: 180px;
+        height: auto;
+        filter:drop-shadow(-6px 6px 10px rgba(0,0,0,0.25));
+    }
+
+
     footer { background: #333; color: white; padding: 20px; text-align: center; }
     .key-container { margin-bottom: 10px; font-size: 12px; }
     .key-container input { padding: 5px 10px; border-radius: 5px; border: none; width: 280px; margin-top: 5px; }
 
+    /* Media Queries */
     @media (max-width:1000px){
-      main { grid-template-columns: 1fr; }
-      .left-column { order: 2; }
-      .right-column { order: 1; }
+      main { grid-template-columns: 1fr; } /* Colonna singola su mobile */
+      .main-iframe-column { height: 60vh; } /* Altezza più piccola per iframe */
+      .image-generator-column { order: 2; } /* Sposta il generatore sotto */
+      .main-iframe-column { order: 1; } /* L'iframe rimane sopra */
+      .bottom-section-wrapper { grid-template-columns: 1fr; }
+      .leo-mascot-bottom { order: 2; }
     }
   </style>
 </head>
@@ -180,52 +244,56 @@
 
 <main>
   
-  <div class="left-column">
-    <div class="info-panel">
-      <div class="photo-grid">
-        <div class="polaroid dynamic">
-          <img id="aiImage" src="images/aigenerated.png" alt="Disegno AI">
-          <div class="caption" id="image-caption">🎨 Il tuo schizzo apparirà qui</div>
-        </div>
-        <div class="polaroid">
-          <img src="images/vigevano_piazza.jpeg">
-          <div class="caption">Piazza Ducale</div>
-        </div>
-      </div>
-
-      <div class="mirror-section">
-        <h3>✍️ Scrittura a Specchio</h3>
-        <div class="mirror-box">
-          <input class="mirror-input" id="inputText" oninput="mirrorText()" placeholder="Tuo nome...">
-          <div class="mirror-output" id="outputText">...iuq ivircS</div>
-        </div>
-      </div>
+  <div class="image-generator-column">
+    <div class="generator-box">
+      <div class="chat-label">🖌️ Il Pennello Magico (DALL-E 3)</div>
+      <textarea id="prompt-input" placeholder="Chiedimi di disegnare qualcosa nello stile del Rinascimento..."></textarea>
+      <button onclick="generateImage()" id="btn-generate">Disegna ora!</button>
+      <div id="loader">🎨 Sto dipingendo...</div>
     </div>
     
-    <div style="text-align: center;">
-      <img src="images/leonardo_fullbody.png" style="max-width: 150px;" alt="Leonardo">
+    <div class="polaroid dynamic">
+      <img id="aiImage" src="https://via.placeholder.com/300x200?text=Il+tuo+schizzo+qui" alt="Disegno AI">
+      <div class="caption" id="image-caption">Il tuo schizzo apparirà qui</div>
     </div>
   </div>
 
-  <div class="right-column">
-    
-    <div class="chat-container main-chat">
-      <div class="chat-label">💬 Chiedi a Leonardo</div>
-      <iframe src="https://app.edcafe.ai/chatbots/69627ce3eb4c94b62a58cdf3" allow="microphone"></iframe>
-    </div>
-
-    <div class="chat-container image-tool">
-      <div class="chat-label">🖌️ Il Pennello Magico (DALL-E 3)</div>
-      <div id="image-chat-box">
-        <textarea id="prompt-input" placeholder="Esempio: Una macchina volante..."></textarea>
-        <button onclick="generateImage()" id="btn-generate">Disegna ora!</button>
-        <div id="loader" style="display:none; text-align: center; font-size: 13px; color: var(--accent-red);">🎨 Sto dipingendo...</div>
-      </div>
-    </div>
-
+  <div class="main-iframe-column">
+    <div class="chat-label">💬 Chiedi a Leonardo</div>
+    <iframe src="https://app.edcafe.ai/chatbots/69627ce3eb4c94b62a58cdf3" allow="microphone"></iframe>
   </div>
 
 </main>
+
+<div class="bottom-section-wrapper">
+    <div class="info-panel">
+        <h2>Le Opere di Vigevano</h2>
+        <div class="photo-grid-bottom">
+            <div class="polaroid-bottom">
+                <img src="images/vigevano_piazza.jpeg" alt="Piazza Ducale">
+                <div class="caption">Piazza Ducale</div>
+            </div>
+            <div class="polaroid-bottom">
+                <img src="images/vigevano_torre.jpeg" alt="Torre del Castello">
+                <div class="caption">Torre del Castello</div>
+            </div>
+        </div>
+
+        <div class="mirror-section">
+            <h3>✍️ Scrittura a Specchio</h3>
+            <div class="mirror-box">
+                <input class="mirror-input" id="inputText" oninput="mirrorText()" placeholder="Tuo nome...">
+                <div class="mirror-output" id="outputText">...iuq ivircS</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="leo-mascot-bottom">
+        <img src="images/leonardo_fullbody.png" alt="Leonardo">
+        <p><strong>Esplora e crea con me!</strong></p>
+    </div>
+</div>
+
 
 <footer>
   <div class="key-container">
@@ -256,6 +324,7 @@
     btn.disabled = true;
     loader.style.display = "block";
     caption.innerText = "Leonardo sta lavorando...";
+    aiImage.src = "https://via.placeholder.com/300x200?text=Sto+disegnando..."; // Immagine temporanea
 
     try {
       const response = await fetch("https://api.openai.com/v1/images/generations", {
@@ -281,6 +350,7 @@
     } catch (e) {
       alert("Errore: " + e.message);
       caption.innerText = "Riprova più tardi.";
+      aiImage.src = "https://via.placeholder.com/300x200?text=Errore+nel+caricamento";
     } finally {
       btn.disabled = false;
       loader.style.display = "none";
