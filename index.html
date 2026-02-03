@@ -44,6 +44,22 @@
     main{
       flex:1; width:95%; max-width:1500px; margin:10px auto;
       display: grid; grid-template-columns: 350px 1fr; gap: 25px;
+      position: relative;
+    }
+
+    /* Immagine Leonardo in Overlay */
+    .leo-overlay {
+      position: absolute;
+      left: 310px; /* Posizionato tra le due colonne */
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      pointer-events: none; /* Non blocca i click sull'iframe */
+    }
+
+    .leo-overlay img {
+      max-width: 180px;
+      filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.2));
     }
 
     /* COLONNA SINISTRA: Generatore */
@@ -68,7 +84,6 @@
     }
     #btn-generate:disabled { background: #ccc; cursor: not-allowed; }
 
-    /* ANIMAZIONE CARICAMENTO */
     .polaroid.dynamic {
       background:#fff; padding:10px 10px 25px; box-shadow:0 4px 12px rgba(0,0,0,0.1);
       border: 3px solid var(--accent-green); transform: rotate(1deg); text-align:center;
@@ -79,10 +94,9 @@
       width:100%; height:250px; object-fit:cover; border: 1px solid #eee; transition: opacity 0.5s;
     }
 
-    /* Overlay animato per il "Loading" */
     .painting-overlay {
       display: none; position: absolute; top: 10px; left: 10px; right: 10px; 
-      height: 250px; background: #f4e4bc; /* Colore pergamena antica */
+      height: 250px; background: #f4e4bc; 
       z-index: 5; flex-direction: column; align-items: center; justify-content: center;
       animation: pulse 2s infinite ease-in-out;
     }
@@ -111,7 +125,7 @@
     /* SEZIONE INFERIORE */
     .bottom-section-wrapper {
         width: 95%; max-width: 1500px; margin: 20px auto;
-        display: grid; grid-template-columns: 1fr 300px; gap: 25px;
+        display: grid; grid-template-columns: 1fr; gap: 25px;
     }
 
     .info-panel {
@@ -136,8 +150,8 @@
 
     @media (max-width:1000px){
       main { grid-template-columns: 1fr; }
+      .leo-overlay { display: none; } /* Nascondi overlay su mobile per spazio */
       .main-iframe-column { height: 500px; }
-      .bottom-section-wrapper { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -152,6 +166,10 @@
 </header>
 
 <main>
+  <div class="leo-overlay">
+      <img src="images/leonardo_fullbody.png" alt="Leonardo">
+  </div>
+
   <div class="image-generator-column">
     <div class="generator-box">
       <div class="chat-label">🖌️ Pennello Magico</div>
@@ -196,11 +214,6 @@
             </div>
         </div>
     </div>
-
-    <div style="text-align:center;">
-        <img src="images/leonardo_fullbody.png" style="max-width: 150px;" alt="Leonardo">
-        <p><strong>Crea e impara!</strong></p>
-    </div>
 </div>
 
 <footer>
@@ -227,7 +240,6 @@
     if (!key) { alert("Metti la chiave nel fondo della pagina!"); return; }
     if (!prompt) { alert("Cosa vuoi che disegni?"); return; }
 
-    // Attiva caricamento
     btn.disabled = true;
     overlay.style.display = "flex";
     aiImage.style.opacity = "0.3";
@@ -251,10 +263,8 @@
       const data = await response.json();
       if (data.error) throw new Error(data.error.message);
 
-      // Carica immagine
       aiImage.src = data.data[0].url;
       
-      // Aspetta che l'immagine sia effettivamente caricata nel browser prima di togliere l'animazione
       aiImage.onload = () => {
           overlay.style.display = "none";
           aiImage.style.opacity = "1";
