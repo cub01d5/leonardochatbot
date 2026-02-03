@@ -130,8 +130,13 @@
     .section-title { text-align: center; font-size: 22px; color: var(--accent-red); margin-bottom: 20px; }
 
     .photo-grid-bottom { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; justify-items: center; }
-    .polaroid-bottom { background:#fff; padding:10px 10px 25px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:center; width: 100%; }
-    .polaroid-bottom img { width:100%; height:auto; aspect-ratio: 4/3; object-fit: cover; border: 1px solid #eee; }
+    .polaroid-bottom { background:#fff; padding:10px 10px 20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:center; width: 100%; }
+    .polaroid-bottom img { width:100%; height:auto; aspect-ratio: 4/3; object-fit: cover; border: 1px solid #eee; margin-bottom: 10px; }
+    
+    .quiz-container { display: flex; flex-direction: column; gap: 5px; padding: 0 10px; }
+    .quiz-input { padding: 5px; border: 2px solid #ddd; border-radius: 5px; font-family: inherit; }
+    .quiz-btn { background: var(--accent-blue); color: #fff; border: none; padding: 5px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    .quiz-feedback { font-size: 14px; font-weight: bold; margin-top: 5px; min-height: 1.2em; }
 
     .mirror-section {
       background:#fff; padding:15px; border-radius:var(--radius); margin-top:30px;
@@ -191,23 +196,39 @@
 
 <div class="bottom-section-wrapper">
     <div class="info-panel">
-        <div class="section-title">🏰 Il Laboratorio di Leonardo</div>
+        <div class="section-title">🏰 Come si chiama questo posto?</div>
         <div class="photo-grid-bottom">
             <div class="polaroid-bottom">
-                <img src="images/vigevano_piazza.jpeg" alt="Piazza Ducale">
-                <div class="caption">Piazza Ducale</div>
+                <img src="images/vigevano_piazza.jpeg" alt="Piazza">
+                <div class="quiz-container">
+                    <input type="text" class="quiz-input" placeholder="Nome del posto..." id="q1-input">
+                    <button class="quiz-btn" onclick="checkQuiz(1, ['piazza ducale', 'piazza'])">Verifica</button>
+                    <div class="quiz-feedback" id="q1-feedback"></div>
+                </div>
             </div>
             <div class="polaroid-bottom">
-                <img src="images/vigevano_torre.jpeg" alt="Torre del Castello">
-                <div class="caption">Torre del Castello</div>
+                <img src="images/vigevano_torre.jpeg" alt="Torre">
+                <div class="quiz-container">
+                    <input type="text" class="quiz-input" placeholder="Nome del posto..." id="q2-input">
+                    <button class="quiz-btn" onclick="checkQuiz(2, ['torre del castello', 'castello', 'torre del bramante'])">Verifica</button>
+                    <div class="quiz-feedback" id="q2-feedback"></div>
+                </div>
             </div>
             <div class="polaroid-bottom">
-                <img src="images/mora_bassa.jpg" alt="Il mulino di Mora Bassa">
-                <div class="caption">Il mulino di Mora Bassa</div>
+                <img src="images/mora_bassa.jpg" alt="Mulino">
+                <div class="quiz-container">
+                    <input type="text" class="quiz-input" placeholder="Nome del posto..." id="q3-input">
+                    <button class="quiz-btn" onclick="checkQuiz(3, ['il mulino di mora bassa', 'mora bassa', 'mulino di mora bassa'])">Verifica</button>
+                    <div class="quiz-feedback" id="q3-feedback"></div>
+                </div>
             </div>
             <div class="polaroid-bottom">
-                <img src="images/sforzesca.jpg" alt="La Sforzesca">
-                <div class="caption">La Sforzesca</div>
+                <img src="images/sforzesca.jpg" alt="Sforzesca">
+                <div class="quiz-container">
+                    <input type="text" class="quiz-input" placeholder="Nome del posto..." id="q4-input">
+                    <button class="quiz-btn" onclick="checkQuiz(4, ['la sforzesca', 'sforzesca', 'sforzsca'])">Verifica</button>
+                    <div class="quiz-feedback" id="q4-feedback"></div>
+                </div>
             </div>
         </div>
 
@@ -232,6 +253,19 @@
   function mirrorText(){
     const input = document.getElementById("inputText").value;
     document.getElementById("outputText").innerText = input === "" ? "...iuq ivircS" : input.split("").reverse().join("");
+  }
+
+  function checkQuiz(id, validAnswers) {
+    const input = document.getElementById(`q${id}-input`).value.toLowerCase().trim();
+    const feedback = document.getElementById(`q${id}-feedback`);
+    
+    if (validAnswers.some(ans => input === ans)) {
+      feedback.innerText = "✅ Corretto!";
+      feedback.style.color = "var(--accent-green)";
+    } else {
+      feedback.innerText = "❌ Riprova!";
+      feedback.style.color = "var(--accent-red)";
+    }
   }
 
   async function generateImage() {
