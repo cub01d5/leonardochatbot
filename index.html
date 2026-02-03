@@ -47,10 +47,10 @@
       position: relative;
     }
 
-    /* Immagine Leonardo ingrandita e in Overlay */
+    /* Leonardo ancora più grande */
     .leo-overlay {
       position: absolute;
-      left: 290px; 
+      left: 260px; 
       top: 50%;
       transform: translateY(-50%);
       z-index: 10;
@@ -58,8 +58,8 @@
     }
 
     .leo-overlay img {
-      max-width: 240px; /* Ingrandito */
-      filter: drop-shadow(8px 8px 15px rgba(0,0,0,0.3));
+      max-width: 320px; 
+      filter: drop-shadow(10px 10px 20px rgba(0,0,0,0.3));
     }
 
     .image-generator-column { display: flex; flex-direction: column; gap: 15px; }
@@ -83,14 +83,16 @@
     }
     #btn-generate:disabled { background: #ccc; cursor: not-allowed; }
 
-    .polaroid.dynamic {
+    /* Polaroid nascosta inizialmente */
+    #output-polaroid {
+      display: none;
       background:#fff; padding:10px 10px 25px; box-shadow:0 4px 12px rgba(0,0,0,0.1);
       border: 3px solid var(--accent-green); transform: rotate(1deg); text-align:center;
       position: relative; overflow: hidden;
     }
 
-    .polaroid.dynamic img {
-      width:100%; height:250px; object-fit:cover; border: 1px solid #eee; transition: opacity 0.5s;
+    #output-polaroid img {
+      width:100%; height:250px; object-fit:contain; background: #fafafa; border: 1px solid #eee; transition: opacity 0.5s;
     }
 
     .painting-overlay {
@@ -107,10 +109,7 @@
       50% { background-color: #e2d1a6; }
       100% { background-color: #f4e4bc; }
     }
-    @keyframes rotate { 
-        0% { transform: rotate(0deg); } 
-        100% { transform: rotate(360deg); } 
-    }
+    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     .main-iframe-column {
       background: #fff; padding: 10px; border-radius: var(--radius);
@@ -130,9 +129,10 @@
       box-shadow:var(--shadow); border:3px dashed var(--accent-blue);
     }
 
-    .photo-grid-bottom { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; }
-    .polaroid-bottom { background:#fff; padding:8px 8px 20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:center; }
-    .polaroid-bottom img { width:100%; height:120px; object-fit:cover; }
+    /* Immagini proporzionate */
+    .photo-grid-bottom { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; justify-items: center; }
+    .polaroid-bottom { background:#fff; padding:10px 10px 25px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:center; width: 100%; max-width: 300px; }
+    .polaroid-bottom img { width:100%; height:auto; aspect-ratio: 4/3; object-fit: cover; border: 1px solid #eee; }
 
     .mirror-section {
       background:#fff; padding:15px; border-radius:var(--radius); margin-top:15px;
@@ -145,7 +145,7 @@
     footer { background: #333; color: white; padding: 20px; text-align: center; }
     .key-container input { padding: 5px 10px; border-radius: 5px; border: none; width: 280px; }
 
-    @media (max-width:1000px){
+    @media (max-width:1100px){
       main { grid-template-columns: 1fr; }
       .leo-overlay { display: none; }
       .main-iframe-column { height: 500px; }
@@ -174,12 +174,12 @@
       <button onclick="generateImage()" id="btn-generate">Disegna ora!</button>
     </div>
     
-    <div class="polaroid dynamic">
+    <div class="polaroid" id="output-polaroid">
       <div id="painting-overlay" class="painting-overlay">
           <span>🎨</span>
           <p>Sto dipingendo...</p>
       </div>
-      <img id="aiImage" src="https://leonardointeractivemuseum.com/wp-content/uploads/2021/09/Laboratori-didattici-nel-leonardo-interactive-museum-di-firenze-via-dei-servi-66r.webp" alt="Disegno AI">
+      <img id="aiImage" src="" alt="Disegno AI">
       <div class="caption" id="image-caption"></div>
     </div>
   </div>
@@ -230,6 +230,7 @@
     const key = document.getElementById("api-key-input").value.trim();
     const prompt = document.getElementById("prompt-input").value.trim();
     const btn = document.getElementById("btn-generate");
+    const polaroid = document.getElementById("output-polaroid");
     const overlay = document.getElementById("painting-overlay");
     const aiImage = document.getElementById("aiImage");
     const caption = document.getElementById("image-caption");
@@ -238,8 +239,9 @@
     if (!prompt) { alert("Cosa vuoi che disegni?"); return; }
 
     btn.disabled = true;
+    polaroid.style.display = "block"; // Mostra la sezione
     overlay.style.display = "flex";
-    aiImage.style.opacity = "0.3";
+    aiImage.style.opacity = "0";
     caption.innerText = "Attendi, sto creando...";
 
     try {
