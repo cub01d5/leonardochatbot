@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LeoBot: Il Laboratorio di Leonardo 🏰</title>
+
+  <style>
+    :root{
+      --bg-sunny: #fff9c4;
+      --ink: #37474f;
+      --card-bg: #fffffffa;
+      --accent-red: #ff7043;
+      --accent-blue: #42a5f5;
+      --accent-green: #66bb6a;
+      --shadow: 0 10px 25px rgba(0,0,0,0.1);
+      --radius: 20px;
+      --font: "Comic Sans MS","Chalkboard SE","Segoe UI Emoji",sans-serif;
+    }
+
+    *{ box-sizing:border-box }
+
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--ink);
+      background:linear-gradient(135deg,var(--bg-sunny) 0%,#81d4fa 100%);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{ padding:15px; text-align:center; }
+
+    .brand{
+      display:inline-flex; align-items:center; gap:15px; background:#fff;
+      padding:8px 25px; border-radius:50px; box-shadow:0 5px 0 rgba(0,0,0,0.1);
+      border:3px solid var(--accent-blue);
+    }
+
+    .brand img{ width:50px; height:50px; border-radius:50%; border:2px solid var(--accent-red); object-fit:cover; }
+    .brand h1{ margin:0; font-size:24px; color:var(--accent-red); }
+
+    main{
+      flex:1; width:95%; max-width:1500px; margin:10px auto;
+      display: grid; grid-template-columns: 350px 1fr; gap: 25px;
+      position: relative;
+    }
+
+    .leo-overlay {
+      position: absolute;
+      left: 170px; 
+      top: 50%;
+      transform: translateY(-80%);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .leo-overlay img {
+      max-width: 450px; 
+      filter: drop-shadow(10px 10px 20px rgba(0,0,0,0.3));
+    }
+
+    .image-generator-column { display: flex; flex-direction: column; gap: 15px; }
+
+    .generator-box {
+      background:var(--card-bg); padding:15px; border-radius:var(--radius);
+      box-shadow:var(--shadow); border:4px solid var(--accent-blue);
+      display: flex; flex-direction: column;
+    }
+
+    .chat-label { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 10px; }
+
+    .mode-toggle {
+      display: flex;
+      background: #f0f0f0;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 15px;
+      gap: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .mode-btn {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      background: transparent;
+      color: #777;
+    }
+
+    .mode-btn.active {
+      background: var(--accent-blue);
+      color: white;
+    }
+
+    textarea {
+      width: 100%; height: 100px; border-radius: 10px; border: 2px solid #ddd;
+      padding: 12px; font-family: inherit; resize: none; font-size: 14px; margin-bottom: 10px;
+    }
+
+    #btn-generate {
+      background: var(--accent-blue); color: white; border: none;
+      border-radius: 10px; padding: 12px; cursor: pointer; font-weight: bold; font-size: 15px;
+      transition: background 0.3s;
+    }
+    #btn-generate:disabled { background: #ccc; cursor: not-allowed; }
+
+    #output-polaroid {
+      display: none;
+      background:#fff; padding:10px 10px 25px; box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      border: 3px solid var(--accent-green); transform: rotate(1deg); text-align:center;
+      position: relative; overflow: hidden;
+    }
+
+    #output-polaroid img {
+      width:100%; height:250px; object-fit:contain; background: #fafafa; border: 1px solid #eee; transition: opacity 0.5s;
+    }
+
+    .painting-overlay {
+      display: none; position: absolute; top: 10px; left: 10px; right: 10px; 
+      height: 250px; background: #f4e4bc; 
+      z-index: 5; flex-direction: column; align-items: center; justify-content: center;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .painting-overlay span { font-size: 40px; animation: rotate 4s infinite linear; }
+
+    @keyframes pulse {
+      0% { background-color: #f4e4bc; }
+      50% { background-color: #e2d1a6; }
+      100% { background-color: #f4e4bc; }
+    }
+    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    .main-iframe-column {
+      background: #fff; padding: 10px; border-radius: var(--radius);
+      box-shadow: var(--shadow); border: 4px solid var(--accent-green);
+      display: flex; flex-direction: column; height: 700px;
+    }
+
+    iframe { flex: 1; width: 100%; border-radius: 14px; border: none; }
+
+    footer { background: #333; color: white; padding: 20px; text-align: center; margin-top: auto; }
+    .key-container input { padding: 5px 10px; border-radius: 5px; border: none; width: 280px; }
+
+    @media (max-width:1100px){
+      main { grid-template-columns: 1fr; }
+      .leo-overlay { display: none; }
+      .main-iframe-column { height: 500px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <img src="images/logo.png" alt="Leo Avatar">
+    <h1>Il Laboratorio di Leonardo</h1>
+  </div>
+</header>
+
+<main>
+  <div class="leo-overlay">
+      <img src="images/leonardo_fullbody.png" alt="Leonardo">
+  </div>
+
+  <div class="image-generator-column">
+    <div class="generator-box">
+      <div class="chat-label">🖌️ Pennello Magico</div>
+      
+      <div class="mode-toggle">
+        <button id="mode-ai" class="mode-btn active" onclick="setMode('ai')">🤖 AI</button>
+        <button id="mode-search" class="mode-btn" onclick="setMode('search')">🔍 Ricerca</button>
+      </div>
+
+      <textarea id="prompt-input" placeholder="Esempio: Una bicicletta di legno..."></textarea>
+      <button onclick="handleAction()" id="btn-generate">Disegna ora!</button>
+    </div>
+    
+    <div class="polaroid" id="output-polaroid">
+      <div id="painting-overlay" class="painting-overlay">
+          <span>🎨</span>
+          <p id="overlay-text">Sto dipingendo...</p>
+      </div>
+      <img id="aiImage" src="" alt="Risultato">
+      <div class="caption" id="image-caption"></div>
+    </div>
+  </div>
+
+  <div class="main-iframe-column">
+    <div class="chat-label">💬 Chiedi a Leonardo</div>
+    <iframe src="https://app.edcafe.ai/chatbots/697e216f0710e0ddf2691886" allow="microphone"></iframe>
+  </div>
+</main>
+
+<footer>
+  <div class="key-container">
+    🔑 OpenAI Key: <input type="password" id="api-key-input" placeholder="sk-...">
+  </div>
+  <p>🏰 Progetto Didattico - Scuola Primaria - Vigevano</p>
+</footer>
+
+<script>
+  let currentMode = 'ai';
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('mode-ai').classList.toggle('active', mode === 'ai');
+    document.getElementById('mode-search').classList.toggle('active', mode === 'search');
+    
+    const btn = document.getElementById("btn-generate");
+    btn.innerText = mode === 'ai' ? "Disegna ora!" : "Cerca Immagine!";
+    btn.style.background = mode === 'ai' ? "var(--accent-blue)" : "var(--accent-green)";
+  }
+
+  function handleAction() {
+    if (currentMode === 'ai') {
+      generateImage();
+    } else {
+      searchWikimedia();
+    }
+  }
+
+  async function generateImage() {
+    const key = document.getElementById("api-key-input").value.trim();
+    const prompt = document.getElementById("prompt-input").value.trim();
+    const btn = document.getElementById("btn-generate");
+    const polaroid = document.getElementById("output-polaroid");
+    const overlay = document.getElementById("painting-overlay");
+    const overlayText = document.getElementById("overlay-text");
+    const aiImage = document.getElementById("aiImage");
+    const caption = document.getElementById("image-caption");
+
+    if (!key) { alert("Metti la chiave nel fondo della pagina!"); return; }
+    if (!prompt) { alert("Cosa vuoi che disegni?"); return; }
+
+    btn.disabled = true;
+    polaroid.style.display = "block";
+    overlay.style.display = "flex";
+    overlayText.innerText = "Sto dipingendo...";
+    aiImage.style.opacity = "0";
+    caption.innerText = "Attendi, sto creando...";
+
+    try {
+      const response = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${key}`
+        },
+        body: JSON.stringify({
+          model: "dall-e-3",
+          prompt: "A renaissance sketch by Leonardo da Vinci on ancient paper, sepia ink, detailed drawing of: " + prompt,
+          n: 1,
+          size: "1024x1024"
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+
+      aiImage.src = data.data[0].url;
+      
+      aiImage.onload = () => {
+          overlay.style.display = "none";
+          aiImage.style.opacity = "1";
+          caption.innerText = "Ecco lo schizzo finito!";
+          btn.disabled = false;
+      };
+
+    } catch (e) {
+      alert("Errore: " + e.message);
+      overlay.style.display = "none";
+      btn.disabled = false;
+    }
+  }
+
+  async function searchWikimedia() {
+    const prompt = document.getElementById("prompt-input").value.trim();
+    const btn = document.getElementById("btn-generate");
+    const polaroid = document.getElementById("output-polaroid");
+    const overlay = document.getElementById("painting-overlay");
+    const overlayText = document.getElementById("overlay-text");
+    const aiImage = document.getElementById("aiImage");
+    const caption = document.getElementById("image-caption");
+
+    if (!prompt) { alert("Cosa devo cercare negli archivi?"); return; }
+
+    btn.disabled = true;
+    polaroid.style.display = "block";
+    overlay.style.display = "flex";
+    overlayText.innerText = "Cerco negli archivi...";
+    aiImage.style.opacity = "0";
+    caption.innerText = "Esploro la biblioteca...";
+
+    try {
+      const searchUrl = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&generator=search&gsrsearch=File:${encodeURIComponent(prompt)}&gsrlimit=1&piprop=thumbnail&pithumbsize=800`;
+      
+      const response = await fetch(searchUrl);
+      const data = await response.json();
+
+      if (!data.query || !data.query.pages) {
+        throw new Error("Nessuna immagine trovata per questo termine.");
+      }
+
+      const pages = data.query.pages;
+      const firstPageId = Object.keys(pages)[0];
+      const imageUrl = pages[firstPageId].thumbnail.source;
+
+      aiImage.src = imageUrl;
+      
+      aiImage.onload = () => {
+          overlay.style.display = "none";
+          aiImage.style.opacity = "1";
+          caption.innerText = "Ho trovato questo reperto!";
+          btn.disabled = false;
+      };
+
+    } catch (e) {
+      alert("Non ho trovato immagini: " + e.message);
+      overlay.style.display = "none";
+      caption.innerText = "Ricerca vuota.";
+      btn.disabled = false;
+    }
+  }
+</script>
+
+</body>
+</html>
